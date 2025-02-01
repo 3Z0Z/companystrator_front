@@ -1,13 +1,25 @@
 import { AxiosResponse, isAxiosError } from "axios";
-
-import { CompanyDTO } from "../types/company";
-
 import unauth_api from "../lib/unauth-axios";
-import api from "../lib/axios";
+import { Jwt, LoginForm, RegisterForm } from "../types/auth";
 
-export async function getCompany(NIT: string) {
+export async function registerService(request: RegisterForm) {
   try {
-    const { data }: AxiosResponse<CompanyDTO> = await unauth_api.get(`/company/get-company-by-nit/${NIT}`);
+    await unauth_api.post("/user/create-user", request);
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error
+          ? error.response.data.error
+          : "Ocurrio un error desconocido"
+      );
+    }
+    throw new Error("Ocurrió un error desconocido");
+  }
+}
+
+export async function login(request: LoginForm) {
+  try {
+    const { data }: AxiosResponse<Jwt> = await unauth_api.post("/user/login", request);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -21,55 +33,25 @@ export async function getCompany(NIT: string) {
   }
 }
 
-export async function getCompanies() {
+export async function logoutService() {
   try {
-    const { data }: AxiosResponse<CompanyDTO[]> = await unauth_api.get("/company/get-company-list");
+    await unauth_api.post("/user/logout");
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error
+          ? error.response.data.error
+          : "Ocurrio un error desconocido"
+      );
+    }
+    throw new Error("Ocurrió un error desconocido");
+  }
+}
+
+export async function refreshTokenService() {
+  try {
+    const { data }: AxiosResponse<Jwt> = await unauth_api.post("/user/refresh-token");
     return data;
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(
-        error.response.data.error
-          ? error.response.data.error
-          : "Ocurrio un error desconocido"
-      );
-    }
-    throw new Error("Ocurrió un error desconocido");
-  }
-}
-
-export async function createCompany(request: CompanyDTO) {
-  try {
-    await api.post(`/company/create-company`, request);
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(
-        error.response.data.error
-          ? error.response.data.error
-          : "Ocurrio un error desconocido"
-      );
-    }
-    throw new Error("Ocurrió un error desconocido");
-  }
-}
-
-export async function updateCompany(request: CompanyDTO) {
-  try {
-    await api.put(`/company/update-company/${request.NIT}`, request);
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(
-        error.response.data.error
-          ? error.response.data.error
-          : "Ocurrio un error desconocido"
-      );
-    }
-    throw new Error("Ocurrió un error desconocido");
-  }
-}
-
-export async function deleteCompany(nit: string) {
-  try {
-    await api.delete(`/company/delete-company/${nit}`);
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { CompanyDTO } from "../types/company";
-import { getCompanies } from "../services/CompanyService";
-import CompanyComponent from "../components/CompanyComponent";
 import { Link } from "react-router-dom";
+
+import { CompanyDTO } from "../../types/company";
+import { getCompanies } from "../../services/CompanyService";
+
+import ShowCompanyComponent from "../../components/company/ShowCompanyComponent";
 
 export default function CompaniesList() {
   const [companies, setCompanies] = useState<CompanyDTO[]>([]);
@@ -32,8 +34,8 @@ export default function CompaniesList() {
       <h2 className="text-2xl font-bold mb-4">Companies list</h2>
       <div className="grid grid-cols-3 gap-4">
           {companies.map((company) => (
-            <Link to={`/company/${company.NIT}`} key={company.NIT}>
-              <CompanyComponent company={company} />
+            <Link to={`/company/${company.NIT}`} className="border p-5 hover:bg-gray-300 transition-colors" key={company.NIT}>
+              <ShowCompanyComponent company={company} />
             </Link>
           ))}
       </div>
