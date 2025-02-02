@@ -11,6 +11,8 @@ import ProtectedRoutes from "./utils/ProtectedRoutes";
 import CreateProduct from "./pages/home/CreateProduct";
 import EditProduct from "./pages/home/EditProduct";
 import CreateProductCategory from "./pages/home/CreateProductCategory";
+import ProtectedClientRoutes from "./utils/ProtectedClientRoutes";
+import UserOrders from "./pages/home/UserOrders";
 
 export default function Router() {
   return <BrowserRouter>
@@ -23,6 +25,9 @@ export default function Router() {
           <Route path="/company/:nit/create-product" element={<CreateProduct/>} />
           <Route path="/company/:nit/edit-product/:code" element={<EditProduct/>} />
           <Route path="/create-product-category" element={<CreateProductCategory/>} />
+        </Route>
+        <Route element={<ProtectedClientRoutes/>}>
+          <Route path="/my-orders" element={<UserOrders/>} />
         </Route>
       </Route>
       <Route element={<AuthLayout/>} >

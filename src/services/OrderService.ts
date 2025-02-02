@@ -33,6 +33,22 @@ export async function getOrdersByNit(nit: string) {
   }
 }
 
+export async function getUserOrders() {
+  try {
+    const { data }: AxiosResponse<OrderInfoDTO[]> = await api.get(`/order/get-user-orders`);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error
+          ? error.response.data.error
+          : "Ocurrio un error desconocido"
+      );
+    }
+    throw new Error("Ocurrió un error desconocido");
+  }
+}
+
 export async function getOrdersById(id: number) {
   try {
     const { data }: AxiosResponse<OrderGeneralInfoDTO> = await api.get(`/order/get-order-by-id/${id}`);
